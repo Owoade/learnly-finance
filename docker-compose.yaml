@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  nest-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5000:3000'
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URL: mongodb://mongo:27017/learnly  # Replace "yourdatabase" with your actual database name
+
+  mongo:
+    image: mongo
+    ports:
+      - '10997:27017'
