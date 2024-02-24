@@ -1,37 +1,50 @@
 
-import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import JoiValidationPipe from 'src/pipes';
 import { UserAuthValidator } from 'src/pipes/validators/user';
 import { UserService } from './user.service';
+import { ResponseInterceptor } from 'src/interceptors/response.interceptor';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('user')
+// @UseInterceptors(ResponseInterceptor)
 export class UserController {
-
-  constructor(
-    private userService: UserService
-  ){}
+  constructor(private userService: UserService) {}
 
   @Post('/')
   @UsePipes(new JoiValidationPipe(UserAuthValidator))
-  async signup( @Body() body ): Promise<any> {
+  async signup(@Body() body): Promise<any> {
 
-    const token = await this.userService.signUp(body);
+    const response = await this.userService.signUp(body);
 
     return {
-        token
-    }
+      response,
+    };
 
   }
-  
+
   @Post('/login')
   @UsePipes(new JoiValidationPipe(UserAuthValidator))
-  async login( @Body() body ): Promise<any> {
+  async login(@Body() body): Promise<any> {
 
-    const token = await this.userService.login(body);
+    const response = await this.userService.login(body);
 
     return {
-        token
-    }
+      response,
+    };
 
   }
+
+  @UseGuards(AuthGuard)
+  @Get('/')
+  async profile(@Req() req) {
+
+    const user = req.user;
+
+    user.password = undefined;
+
+    return { user };
+
+  }
+
 }

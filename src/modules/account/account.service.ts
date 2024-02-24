@@ -21,7 +21,7 @@ export class AccountService {
 
         const newAccount = await this.accountRepo.create(userId);
 
-        return newAccount;
+        return {newAccount};
 
     }
 
@@ -65,7 +65,7 @@ export class AccountService {
 
         const accounts = await this.accountRepo.getAllAccounts(userId, page, perPage );
 
-        return accounts;
+        return {accounts};
 
     }
 
@@ -79,7 +79,7 @@ export class AccountService {
 
         const transactions = await this.accountRepo.getAllTransactions(accountId, page, perPage);
 
-        return transactions;
+        return {transactions};
 
     }
 
@@ -145,7 +145,7 @@ export class AccountService {
 
         if(!account) throw new NotFoundException("Account not found");
 
-        if( account.User !== dto.userId ) throw new ForbiddenException("Account mismatch");
+        if( account.User.toString() !== dto.userId ) throw new ForbiddenException("Account mismatch");
 
         if( account.balance > 0 ) throw new BadRequestException("Withdraw all funds before deleting");
 

@@ -6,13 +6,22 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5000:3000'
+      - '5000:5000'
     depends_on:
       - mongo
+      - redis
     environment:
-      MONGO_URL: mongodb://mongo:27017/learnly  # Replace "yourdatabase" with your actual database name
+      MONGO_URL: mongodb://mongo:27017/learnly
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
 
   mongo:
     image: mongo
     ports:
       - '10997:27017'
+
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+

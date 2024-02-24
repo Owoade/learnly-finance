@@ -44,7 +44,7 @@ export class AccountRepository {
     }
 
     async getUseraccount( accountId: string, userId: string ){
-        return await this.Account.findOne({ id: accountId, User: userId }).exec();
+        return await this.Account.findOne({ _id: accountId, User: userId });
     }
 
     async createTransaction( payload: TransactionModelInterface ){
@@ -57,17 +57,21 @@ export class AccountRepository {
 
     async getAllTransactions( accountId: string, page: number, perPage: number  ){
 
-        const transactions = await this.Transaction.find({fromAccount: accountId}).limit(perPage).skip((page - 1)*perPage).exec();
+        const count = await this.Transaction.countDocuments({fromAccount: accountId});
 
-        return transactions;
+        const rows = await this.Transaction.find({fromAccount: accountId}).limit(perPage).skip((page - 1)*perPage).exec();
+
+        return {count, rows};
 
     }
 
     async getAllAccounts( userId: string, page: number, perPage:number ){
 
-        const accounts = await this.Account.find({User: userId}).limit(perPage).skip((page - 1)*perPage).exec();
+        const count = await this.Account.countDocuments({User: userId});
 
-        return accounts;
+        const rows = await this.Account.find({User: userId}).limit(perPage).skip((page - 1)*perPage).exec();
+
+        return {count, rows};
 
     }
 

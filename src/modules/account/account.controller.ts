@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Post, Query, Req, Request, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Query, Req, Request, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AccountService } from "./account.service";
-import { AuthGuard } from "src/guards/auth";
+import { AuthGuard } from "src/guards/auth.guard";
 import { AccountDepositDto, AccountTransferDto, AccountWithdrawalDto, DeleteAccountDto } from "./account.dto";
 import JoiValidationPipe from "src/pipes";
 import { accountIdValidator, accountTransferValidator, getAccountsValidator, getTransactionsValidator, singleAccountValidator } from "src/pipes/validators/account";
+import { ResponseInterceptor } from "src/interceptors/response.interceptor";
 
 @Controller("account")
+@UseInterceptors(ResponseInterceptor)
 @UseGuards(AuthGuard)
 export class AccountController {
     constructor(
@@ -50,7 +52,7 @@ export class AccountController {
 
         console.log(account);
         
-        return account;
+        return {account};
 
     }
 
@@ -112,7 +114,11 @@ export class AccountController {
 
     @Delete("/")
     @UsePipes(new JoiValidationPipe(accountIdValidator))
-    async deleteAccount(@Query() query: DeleteAccountDto){
+    async deleteAccount(@Query() query: DeleteAccountDto, @Req() req ){
+
+      const userId = req.userId;
+
+      query.userId = userId;
 
       await this.accountService.deleteAccount(query)
 

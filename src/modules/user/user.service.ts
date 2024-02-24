@@ -19,13 +19,13 @@ export class UserService {
 
         if(!existingUser) throw new NotFoundException('User not found');
 
-        const userPassword = this.authService.hashPassword(user.password);
+        const PASSWORD_IS_NOT_VALID = !this.authService.comparePassword(user.password, existingUser.password);
 
-        if( userPassword !== existingUser.password ) throw new UnauthorizedException('Invalid password'); 
+        if( PASSWORD_IS_NOT_VALID  ) throw new UnauthorizedException('Invalid password'); 
 
         const token = this.authService.generateToken( JWT_SECRET, { id: existingUser.id });
 
-        return token;
+        return {token, userId: existingUser.id};
         
     }
 
@@ -43,7 +43,7 @@ export class UserService {
 
         const token = this.authService.generateToken( JWT_SECRET, { id: newUser.id });
 
-        return token;
+        return {token, userId: newUser.id};
 
     }
 
