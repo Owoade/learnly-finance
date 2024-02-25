@@ -9,7 +9,10 @@
 
 - **Transaction Management:** Database transactions were utilized in creating account transaction records to ensure atomicity and consistency.
 
-- **Data Validation and Error Handling:** A Pipe Decorator alongside Joi, a data validation library, was employed to ensure data integrity. Built-in exception classes handled errors in a client-friendly manner.
+- **Data Validation and Error Handling:** A Pipe Decorator alongside Joi, a data validation library, was employed to ensure data integrity. Built-in exception classes handled errors in a client-friendly manner
+.
+- **Pagination:** Implemented pagination on all list endpoints to improve database performance and reduce latency.
+
 
 - **Logging and Monitoring:** Logging was managed using morgan, a logger, while Sentry was utilized for monitoring purposes.
 
