@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5000
 
 # Command to run your app using npm
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start"]
