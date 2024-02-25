@@ -1,9 +1,8 @@
 
 import { Body, Controller, Get, Post, Req, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
-import JoiValidationPipe from 'src/pipes';
+import JoiValidationPipe from 'src/pipes/';
 import { UserAuthValidator } from 'src/pipes/validators/user';
 import { UserService } from './user.service';
-import { ResponseInterceptor } from 'src/interceptors/response.interceptor';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('user')

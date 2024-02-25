@@ -59,7 +59,7 @@ export class AccountRepository {
 
         const count = await this.Transaction.countDocuments({fromAccount: accountId});
 
-        const rows = await this.Transaction.find({fromAccount: accountId}).limit(perPage).skip((page - 1)*perPage).exec();
+        const rows = await this.Transaction.find({fromAccount: accountId}).limit(perPage)?.skip((page - 1)*perPage).exec();
 
         return {count, rows};
 
@@ -69,7 +69,7 @@ export class AccountRepository {
 
         const count = await this.Account.countDocuments({User: userId});
 
-        const rows = await this.Account.find({User: userId}).limit(perPage).skip((page - 1)*perPage).exec();
+        const rows = await this.Account.find({User: userId}).limit(perPage)?.skip((page - 1)*perPage).exec();
 
         return {count, rows};
 

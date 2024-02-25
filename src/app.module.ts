@@ -6,7 +6,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { UserModule } from './modules/user';
 import { AccountModule } from './modules/account';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
-import { SentryFilter } from './exception-filters/sentry.ef';
+import { SentryFilter } from './exception-filters';
 import { ConfigModule } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 import { RedisOptions } from './modules/core/cache';

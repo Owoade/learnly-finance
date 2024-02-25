@@ -2,7 +2,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import * as morgan from "morgan";
 import { AppModule } from './app.module';
 import * as Sentry from "@sentry/node";
-import { SentryFilter } from './exception-filters/sentry.ef';
+import { SentryFilter } from './exception-filters';
 import { SENTRY_DSN } from './constants';
 
 async function bootstrap() {

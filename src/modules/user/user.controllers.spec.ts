@@ -1,6 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { UserController } from "src/modules/user/user.controller"
-import { UserModelinterface } from "src/modules/user/user.type";
+import { UserController } from "./user.controller";
+import { UserModelinterface } from "./user.type";
+import { UserService } from "./user.service";
+
 
 describe('User Controller', () => {
 
@@ -8,23 +10,15 @@ describe('User Controller', () => {
     let mockUserService;
 
     beforeEach(async () => {
+
         mockUserService = {
             login: jest.fn(),
             signUp: jest.fn(),
             findUserbyId: jest.fn()
         };
 
-        const module: TestingModule = await Test.createTestingModule({
-            controllers: [UserController],
-            providers: [
-                {
-                    provide: 'UserService', // Provide the token used in UserController constructor
-                    useValue: mockUserService,
-                },
-            ],
-        }).compile();
-
-        controller = module.get<UserController>(UserController);
+        controller = new UserController(mockUserService); 
+          
     });
 
     it("should be defined", () => {
@@ -64,6 +58,7 @@ describe('User Controller', () => {
 
         // Assert
         expect(userProfile.user.email).toEqual(mockUser.email );
+        
     });
 
 });
