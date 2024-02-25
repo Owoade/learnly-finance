@@ -22,6 +22,7 @@
 
 - **Testing:** Unit tests were written using Jest to ensure the reliability of the solution.
 
+- **Security:** Utilized Bcrypt for password hashing and Implemented Access Control.
 
 ### Folder structure
 
@@ -47,4 +48,4 @@ Run: To start the app with docker run `npm run docker`. Ensure you have docker i
 
 Test: To run all unit tests run `npm run test`.
 
-Ensure you have nest cli installed before running any of the above script.
+Ensure you have nest cli installed before running any of the above script. Run `npm install -g @nestjs/cli` to install it.
