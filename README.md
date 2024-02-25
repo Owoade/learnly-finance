@@ -21,3 +21,31 @@
 - **Containerization:** Docker and docker-compose were employed to containerize the application and its dependencies, including Redis and MongoDB.
 
 - **Testing:** Unit tests were written using Jest to ensure the reliability of the solution.
+
+- **Security:** Utilized Bcrypt for password hashing and Implemented Access Control.
+
+### Folder structure
+
+- **modules:** Each sub-folder in this directory contains: controller, service repository and type definition files.
+
+- **pipes:** This folder houses the data validation logic.
+
+- **guards:** This folder houses authorization logic.
+
+
+- **exception-filters:** This folder contains the logic for monitoring which sends alert to the administrator anytime there is an Internal server error.
+
+
+- **constants:** This folder contains environment variable declarations and app constants for dependency injection.
+
+
+
+### Scripts
+
+Build: To build the project run `npm run build`
+
+Run: To start the app with docker run `npm run docker`. Ensure you have docker installed.
+
+Test: To run all unit tests run `npm run test`.
+
+Ensure you have nest cli installed before running any of the above script. Run `npm install -g @nestjs/cli` to install it.
