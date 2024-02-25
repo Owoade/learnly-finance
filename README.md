@@ -21,3 +21,13 @@
 - **Containerization:** Docker and docker-compose were employed to containerize the application and its dependencies, including Redis and MongoDB.
 
 - **Testing:** Unit tests were written using Jest to ensure the reliability of the solution.
+
+
+### Folder structure
+
+- **modules:** Each sub-folder in this directory contains: controller, service repository and type definition files.
+
+- **pipes:** This folder houses the data validation logic.
+
+- **guards:** This folder houses authorization logic.
+
