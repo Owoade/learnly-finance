@@ -31,3 +31,14 @@
 
 - **guards:** This folder houses authorization logic.
 
+
+- **exception-filters:** This folder contains the logic for monitoring which sends alert to the administrator anytime there is an Internal server error.
+
+
+- **constants:** This folder contains environment variable declarations and app constants for dependency injection.
+
+
+
+### Scripts
+
+Build: To build the project run `npm run build`
