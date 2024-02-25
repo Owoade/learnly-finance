@@ -1,4 +1,5 @@
-Implemented as part of a Financial Management System, the project encompassed various functionalities documented in the API Documentation available at [this link](https://documenter.getpostman.com/view/18966325/2sA2rCV2jW).
+## Implemtation of a Financial Management System:
+[Click here to view API documentation](https://documenter.getpostman.com/view/18966325/2sA2rCV2jW).
 
 ### Key Implementation Details:
 
