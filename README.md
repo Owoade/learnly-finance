@@ -42,3 +42,9 @@
 ### Scripts
 
 Build: To build the project run `npm run build`
+
+Run: To start the app with docker run `npm run docker`. Ensure you have docker installed.
+
+Test: To run all unit tests run `npm run test`.
+
+Ensure you have nest cli installed before running any of the above script.
