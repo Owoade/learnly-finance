@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ACCOUNT_MODEL, ACCOUNT_TRANSACTION_MODEL } from "src/constants";
-import { AccountModelInterface, TransactionModelInterface } from "./account.type";
+import { AccountModelInterface, AccountRepositoryInterface, TransactionModelInterface } from "./account.type";
 import mongoose, { Model } from "mongoose";
 
 @Injectable()
-export class AccountRepository {
+export class AccountRepository implements AccountRepositoryInterface {
 
     constructor(
         @Inject(ACCOUNT_MODEL)
@@ -23,7 +23,7 @@ export class AccountRepository {
 
     }
 
-    async updateBalance( amount: number, accountId ){
+    async updateBalance( amount: number, accountId: string ){
 
         const account = await this.Account.findByIdAndUpdate(accountId, {
             $inc: {
@@ -59,7 +59,7 @@ export class AccountRepository {
 
         const count = await this.Transaction.countDocuments({fromAccount: accountId});
 
-        const rows = await this.Transaction.find({fromAccount: accountId}).limit(perPage)?.skip((page - 1)*perPage).exec();
+        const rows = await this.Transaction.find({fromAccount: accountId}).limit(perPage)?.skip((page - 1)*perPage).exec() as TransactionModelInterface[];
 
         return {count, rows};
 
@@ -69,7 +69,7 @@ export class AccountRepository {
 
         const count = await this.Account.countDocuments({User: userId});
 
-        const rows = await this.Account.find({User: userId}).limit(perPage)?.skip((page - 1)*perPage).exec();
+        const rows = await this.Account.find({User: userId}).limit(perPage)?.skip((page - 1)*perPage).exec() as AccountModelInterface[];
 
         return {count, rows};
 
@@ -80,6 +80,8 @@ export class AccountRepository {
         await this.Account.findByIdAndDelete(accountId);
 
         await this.Transaction.deleteMany({fromAccount: accountId});
+
+        return true;
 
     }
 

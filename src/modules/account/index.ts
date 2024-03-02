@@ -8,6 +8,7 @@ import { AccountRepository } from './account.repo';
 import { UserModule } from '../user';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { databaseUtilsProvider } from 'src/utils/db/dbUtils.provider';
 
 @Module({
   controllers: [AccountController],
@@ -17,6 +18,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
     ...accountProviders,
     ...transactionProviders,
     AccountRepository,
+    databaseUtilsProvider
   ],
   exports: [AccountService],
 })

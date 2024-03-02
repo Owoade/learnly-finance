@@ -1,16 +1,20 @@
-import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Inject, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { AccountRepository } from "./account.repo";
 import { UserService } from "../user/user.service";
-import { NotFoundError } from "rxjs";
 import { AccountDepositDto, AccountTransferDto, AccountWithdrawalDto, DeleteAccountDto } from "./account.dto";
-import dbTransaction from "src/utils/dbTransaction";
+import { AccountModelInterface, AccountServiceInterface } from "./account.type";
+import mongoose from "mongoose";
+import { DatabaseUtils } from "src/utils/db";
+import { DB_UTILS_CONSTANT } from "src/constants";
 
 @Injectable()
-export class AccountService {
+export class AccountService implements AccountServiceInterface {
 
     constructor(
         private accountRepo: AccountRepository,
-        private userService: UserService
+        private userService: UserService,
+        @Inject(DB_UTILS_CONSTANT)
+        private dbUtils: DatabaseUtils
     ){}
 
     async createAccount( userId: string ){
@@ -31,25 +35,25 @@ export class AccountService {
 
         if( !account ) throw new NotFoundException('Senders account not found');
 
-        console.log( account.User, dto.userId)
-
         if( account.User.toString() !== dto.userId ) throw new ForbiddenException("Account mismatch");
-
+    
         try {
 
-            const trx = await dbTransaction(
+            console.log("in try block")
+
+            const trx = await this.dbUtils.dbTransaction(
                 async () => await this.depositTransaction(dto)
             )
-    
+
             return trx;
 
         }catch(e){
 
+            console.log("in error block")
+
             throw new InternalServerErrorException(e.message)
 
         }
-
-     
         
     }
 
@@ -65,7 +69,7 @@ export class AccountService {
 
         const accounts = await this.accountRepo.getAllAccounts(userId, page, perPage );
 
-        return {accounts};
+        return { accounts };
 
     }
 
@@ -95,7 +99,7 @@ export class AccountService {
 
         try {
 
-            const trx = await dbTransaction(
+            const trx = await this.dbUtils.dbTransaction(
                 async ()=> await this.withdrawalTransaction(dto)
             )
     
@@ -125,7 +129,7 @@ export class AccountService {
 
         try {
 
-            const trx = await dbTransaction(
+            const trx = await this.dbUtils.dbTransaction(
                 async ()=> this.transferTransaction(dto)
             )
     
@@ -151,18 +155,22 @@ export class AccountService {
 
         try {
 
-            await dbTransaction(
+            await this.dbUtils.dbTransaction(
                 async ()=> await this.accountRepo.deleteAccount(dto.accountId)
             ) 
 
+            return true;
+
         }catch(e){
 
-            throw new InternalServerErrorException(e.message)
+            throw new InternalServerErrorException(e.message);
 
         }
     }
 
     private async depositTransaction( dto: AccountDepositDto ){
+
+        console.log("in nested try code")
 
         const account = await this.accountRepo.updateBalance(dto.amount, dto.accountId);
 
@@ -223,5 +231,28 @@ export class AccountService {
         }
 
     }
+
+    // private async dbTransaction<T>( callback: (...args: any[]) => T ){
+
+    //     const session = await mongoose.startSession();
+    //     session.startTransaction();
+    
+    //     try {
+    
+    //         const data = await callback();
+    
+    //         await session.commitTransaction();
+    
+    //         return data;
+    
+    //     }catch(e){
+    
+    //         session.abortTransaction();
+    
+    //         throw new Error("Transaction failed");
+    
+    //     }
+        
+    // }
 
 }
